@@ -25,7 +25,15 @@ m = (y2 - y1) / (x2 -x1)
 
 ## Toolset
 
-* XUnit
-* Moq
+* XUnit - unit testing framework
+* Moq - mocking library
 
-## Unit testing with XUnit
+## Unit testing with XUnit - First pass
+
+Limitations with our test code:
+* Lot of noise in test:
+** Creating the timestamps
+** Creating market data values
+
+* Fairly static. How do I test other market situations? - Theory and test parameters
+
