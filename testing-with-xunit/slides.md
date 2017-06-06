@@ -37,3 +37,7 @@ Limitations with our test code:
 
 * Fairly static. How do I test other market situations? - Theory and test parameters
 
+## Mocking domain objects and using the XUnit Theory
+
+* Use POCO fixture to build concrete objects. Reduces constructor coupling, at most two places to change when constructor changes. Allows easy reuse
+
