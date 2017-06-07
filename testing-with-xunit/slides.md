@@ -35,7 +35,10 @@ Limitations with our test code:
 ** Creating the timestamps
 ** Creating market data values
 
-* Fairly static. How do I test other market situations? - Theory and test parameters
+* Fairly static. How do I test other market situations? - introducing the Xunit Theory and test parameters
+
+Fact: Always true for some invariant condition
+Theory: Always true for a data set
 
 ## Mocking domain objects and using the XUnit Theory
 
