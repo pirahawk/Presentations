@@ -52,4 +52,3 @@ namespace MarketAnalyser
         Sell,
     }
 }
-

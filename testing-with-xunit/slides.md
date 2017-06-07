@@ -42,5 +42,9 @@ Theory: Always true for a data set
 
 ## Mocking domain objects and using the XUnit Theory
 
-* Use POCO fixture to build concrete objects. Reduces constructor coupling, at most two places to change when constructor changes. Allows easy reuse
+* Use POCO fixture to build concrete objects. 
+** Reduces constructor coupling, at most two places to change when constructor changes
+** Allows easy reuse
+** Can use method chaining to introduce specific mocking calls that will augment parts of the builder in some context. Makes unit tests/cases more legible & easier to understand 
 
+## Using the Theory attribute to inject test cases

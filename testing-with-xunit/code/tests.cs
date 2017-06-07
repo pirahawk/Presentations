@@ -8,20 +8,11 @@ namespace MarketAnalyser.Test
         [Fact]
         public void TestAlgorithm()
         {
-            DateTimeOffset currentTime = DateTimeOffset.Now;
-            DateTimeOffset previousTime = currentTime - TimeSpan.FromSeconds(2);
+            var currentTick = new MarketDataFixture { MarketValue = 20D }.Build();
+            var previousTick = new MarketDataFixture{ MarketValue = 10D }
+            .WithTimeOffset(currentTick, TimeSpan.FromSeconds(-2))
+            .Build();
 
-            MarketData previousTick = new MarketData
-            {
-                MarketValue = 10D,
-                TimeStamp = previousTime
-            };
-
-            MarketData currentTick = new MarketData
-            {
-                MarketValue = 20D,
-                TimeStamp = currentTime
-            };
 
             PredictionAlgorithm predictionAlgorithm = new PredictionAlgorithm();
 
@@ -31,5 +22,33 @@ namespace MarketAnalyser.Test
         }
     }
 
-    
+    public class MarketDataFixture
+    {
+        public MarketDataFixture()
+        {
+            MarketValue = 10D;
+            Timestamp = DateTimeOffset.Now;
+        }
+
+        public MarketData Build()
+        {
+            return new MarketData
+            {
+                MarketValue = MarketValue,
+                TimeStamp = Timestamp
+            };
+        }
+
+        public MarketDataFixture WithTimeOffset(MarketData marketData, TimeSpan timeSpanToOffset)
+        {
+            Timestamp = marketData.TimeStamp + timeSpanToOffset;
+            return this;
+        }
+
+        public DateTimeOffset Timestamp { get; set; }
+
+        public double MarketValue { get; set; }
+    }
+
+
 }
