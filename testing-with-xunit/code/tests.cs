@@ -1,24 +1,48 @@
 using System;
+using System.Collections.Generic;
 using Xunit;
+using Xunit.Extensions;
 
 namespace MarketAnalyser.Test
 {
     public class PredictionAlgorithmTest
     {
-        [Fact]
-        public void TestAlgorithm()
+        [Theory]
+        [MemberData(nameof(SplitCountData))]
+        public void TestAlgorithm(MarketData previousTick, MarketData currentTick, MarketAction expectedAction)
         {
-            var currentTick = new MarketDataFixture { MarketValue = 20D }.Build();
-            var previousTick = new MarketDataFixture{ MarketValue = 10D }
-            .WithTimeOffset(currentTick, TimeSpan.FromSeconds(-2))
-            .Build();
-
-
             PredictionAlgorithm predictionAlgorithm = new PredictionAlgorithm();
 
             var marketDecision = predictionAlgorithm.GetMarketDecision(previousTick, currentTick);
 
-            Assert.Equal(MarketAction.Sell, marketDecision);
+            Assert.Equal(expectedAction, marketDecision);
+        }
+
+        public static IEnumerable<object[]> SplitCountData
+        {
+            get
+            {
+                var currentTickSell = new MarketDataFixture { MarketValue = 20D }.Build();
+                var previousTickSell = new MarketDataFixture { MarketValue = 10D }
+                    .WithTimeOffset(currentTickSell, TimeSpan.FromSeconds(-2))
+                    .Build();
+
+                yield return new object[] { previousTickSell , currentTickSell , MarketAction.Sell};
+
+                var currentTickBuy = new MarketDataFixture { MarketValue = 10D }.Build();
+                var previousTickBuy = new MarketDataFixture { MarketValue = 20D }
+                    .WithTimeOffset(currentTickBuy, TimeSpan.FromSeconds(-2))
+                    .Build();
+
+                yield return new object[] { previousTickBuy, currentTickBuy, MarketAction.Buy };
+
+                var currentTickNoMovement = new MarketDataFixture { MarketValue = 10D }.Build();
+                var previousTickNoMovement = new MarketDataFixture { MarketValue = 10D }
+                    .WithTimeOffset(currentTickBuy, TimeSpan.FromSeconds(-2))
+                    .Build();
+
+                yield return new object[] { previousTickNoMovement, currentTickNoMovement, MarketAction.Nothing };
+            }
         }
     }
 

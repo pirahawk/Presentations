@@ -48,3 +48,12 @@ Theory: Always true for a data set
 ** Can use method chaining to introduce specific mocking calls that will augment parts of the builder in some context. Makes unit tests/cases more legible & easier to understand 
 
 ## Using the Theory attribute to inject test cases
+
+* Xunit offers three options to inject test data: 
+** InlineData: inline data params inside of attribute
+** MemberData: Data injected using a c# property. Should be static with a `get` that returns `IEnumerable<object[]>`. Each `object[]` represents the parameters to your unit test method. Take care to ensure they match up. (Note: this attribute was formely known as `PropertyData`)
+** ClassData: Use an explicit class that inherits from `IEnumerable<object[]>` and similarly allows iterating through the test cases. Never really had much use for it tbh.
+
+Benefits of approach
+* Can reuse fixtures to mock test cases and can further isolate test case generation (sort of) using naming conventions etc
+* Reducing noise in actual unit test. Test case generation is isolated and injected into the actual unit test. Maintainability ++
