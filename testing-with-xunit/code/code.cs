@@ -2,24 +2,14 @@ using System;
 
 namespace MarketAnalyser
 {
-    public class PredictionAlgorithm
+    public interface IMarketDecisionMaker
     {
-        public MarketAction GetMarketDecision(MarketData previous, MarketData current)
-        {
-            double marketSlope = CalculateMarketSlope(previous, current);
-            MarketAction decision = MakeMarketDecision(marketSlope);
-            return decision;
-        }
+        MarketAction MakeMarketDecision(double marketSlope);
+    }
 
-        private double CalculateMarketSlope(MarketData previous, MarketData current)
-        {
-            double yAxisDifference = current.MarketValue - previous.MarketValue;
-            double xAxisDifference = (current.TimeStamp - previous.TimeStamp).TotalMilliseconds;
-
-            return yAxisDifference / xAxisDifference;
-        }
-
-        private MarketAction MakeMarketDecision(double marketSlope)
+    public class MarketDecisionMaker : IMarketDecisionMaker
+    {
+        public MarketAction MakeMarketDecision(double marketSlope)
         {
             int trend = Math.Sign(marketSlope);
 
@@ -35,6 +25,41 @@ namespace MarketAnalyser
                 default:
                     return MarketAction.Nothing;
             }
+        }
+    }
+
+    public interface IMarketSlopeCalcualtor
+    {
+        double CalculateMarketSlope(MarketData previous, MarketData current);
+    }
+
+    public class MarketSlopeCalcualtor : IMarketSlopeCalcualtor
+    {
+        public double CalculateMarketSlope(MarketData previous, MarketData current)
+        {
+            double yAxisDifference = current.MarketValue - previous.MarketValue;
+            double xAxisDifference = (current.TimeStamp - previous.TimeStamp).TotalMilliseconds;
+
+            return yAxisDifference / xAxisDifference;
+        }
+    }
+
+    public class PredictionAlgorithm
+    {
+        private readonly IMarketSlopeCalcualtor _marketSlopeCalcualtor;
+        private readonly IMarketDecisionMaker _marketDecisionMaker;
+
+        public PredictionAlgorithm(IMarketSlopeCalcualtor marketSlopeCalcualtor, IMarketDecisionMaker marketDecisionMaker)
+        {
+            _marketSlopeCalcualtor = marketSlopeCalcualtor;
+            _marketDecisionMaker = marketDecisionMaker;
+        }
+
+        public MarketAction GetMarketDecision(MarketData previous, MarketData current)
+        {
+            double marketSlope = _marketSlopeCalcualtor.CalculateMarketSlope(previous, current);
+            MarketAction decision = _marketDecisionMaker.MakeMarketDecision(marketSlope);
+            return decision;
         }
     }
 

@@ -42,6 +42,8 @@ Theory: Always true for a data set
 
 ## Mocking domain objects and using the XUnit Theory
 
+Do not new() up types directly in your test!!
+
 * Use POCO fixture to build concrete objects. 
 ** Reduces constructor coupling, at most two places to change when constructor changes
 ** Allows easy reuse
@@ -57,3 +59,11 @@ Theory: Always true for a data set
 Benefits of approach
 * Can reuse fixtures to mock test cases and can further isolate test case generation (sort of) using naming conventions etc
 * Reducing noise in actual unit test. Test case generation is isolated and injected into the actual unit test. Maintainability ++
+
+## Always inject behaviour
+
+* My recommendation: use constructor based injection, easier to mock IMO. Can also try property based injection if you like
+* Depend on interfaces to remove coupling
+* Can verify method calls & correctness using libraries like moq
+
+## Mocking dependencies using Moq

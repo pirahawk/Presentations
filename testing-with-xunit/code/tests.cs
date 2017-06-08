@@ -11,7 +11,7 @@ namespace MarketAnalyser.Test
         [MemberData(nameof(SplitCountData))]
         public void TestAlgorithm(MarketData previousTick, MarketData currentTick, MarketAction expectedAction)
         {
-            PredictionAlgorithm predictionAlgorithm = new PredictionAlgorithm();
+            PredictionAlgorithm predictionAlgorithm = new PredictionAlgorithmFixture().Build();
 
             var marketDecision = predictionAlgorithm.GetMarketDecision(previousTick, currentTick);
 
@@ -74,5 +74,23 @@ namespace MarketAnalyser.Test
         public double MarketValue { get; set; }
     }
 
+
+    public class PredictionAlgorithmFixture
+    {
+        public PredictionAlgorithmFixture()
+        {
+            MarketSlopeCalcualtor = new MarketSlopeCalcualtor();
+            MarketDecisionMaker = new MarketDecisionMaker();
+        }
+
+        public PredictionAlgorithm Build()
+        {
+            return new PredictionAlgorithm(MarketSlopeCalcualtor,MarketDecisionMaker);
+        }
+
+        public MarketDecisionMaker MarketDecisionMaker { get; set; }
+
+        public MarketSlopeCalcualtor MarketSlopeCalcualtor { get; set; }
+    }
 
 }
