@@ -67,3 +67,8 @@ Benefits of approach
 * Can verify method calls & correctness using libraries like moq
 
 ## Mocking dependencies using Moq
+
+* Use Moq to inject calculator behaviour
+* Use verifiable to test for correctness
+* Can either use concrete method arguments or the `It.IsAny<>` construct when arguments are unkown
+* Can verify how many times it was called

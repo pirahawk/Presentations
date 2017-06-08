@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Moq;
 using Xunit;
 using Xunit.Extensions;
 
@@ -16,6 +17,25 @@ namespace MarketAnalyser.Test
             var marketDecision = predictionAlgorithm.GetMarketDecision(previousTick, currentTick);
 
             Assert.Equal(expectedAction, marketDecision);
+        }
+
+        [Fact]
+        public void EnsurePredictionAlgorithmUsesCalculatorAsExpected()
+        {            
+            var mockCalculator = new Mock<IMarketSlopeCalcualtor>();
+            mockCalculator.Setup(m => m.CalculateMarketSlope(It.IsAny<MarketData>(), It.IsAny<MarketData>())).Returns(1);
+
+            var previous = new MarketDataFixture().Build();
+            var current = new MarketDataFixture().Build();
+
+            var predictionAlgorithm = new PredictionAlgorithmFixture
+            {
+                MarketSlopeCalcualtor = mockCalculator.Object
+            }.Build();
+
+            predictionAlgorithm.GetMarketDecision(previous, current);
+
+            mockCalculator.Verify(m => m.CalculateMarketSlope(previous, current), Times.Once);
         }
 
         public static IEnumerable<object[]> SplitCountData
