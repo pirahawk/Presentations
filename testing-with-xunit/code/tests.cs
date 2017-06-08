@@ -88,9 +88,9 @@ namespace MarketAnalyser.Test
             return new PredictionAlgorithm(MarketSlopeCalcualtor,MarketDecisionMaker);
         }
 
-        public MarketDecisionMaker MarketDecisionMaker { get; set; }
+        public IMarketDecisionMaker MarketDecisionMaker { get; set; }
 
-        public MarketSlopeCalcualtor MarketSlopeCalcualtor { get; set; }
+        public IMarketSlopeCalcualtor MarketSlopeCalcualtor { get; set; }
     }
 
 }
